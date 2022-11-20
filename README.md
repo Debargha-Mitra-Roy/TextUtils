@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# TextUtils
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A WebApp for all of your Text Utilities.
 
 ## Available Scripts
 
