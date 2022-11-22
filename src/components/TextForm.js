@@ -3,45 +3,44 @@ import React, { useState } from 'react'
 export default function TextForm(props) {
 
     const handleUpClick = () => {
-        // console.log("UpperCase was clicked :- " + text);
         let newText = text.toUpperCase();
-        setText(newText)
+        setText(newText);
+        props.showAlert("Converted to UpperCase!", "success");
     }
 
     const handleLowClick = () => {
-        // console.log("LowerCase was clicked :- " + text);
         let newText = text.toLowerCase();
-        setText(newText)
+        setText(newText);
+        props.showAlert("Converted to LowerCase!", "success");
     }
 
     const handleCopyText = () => {
-        // console.log("CopyText was clicked :- " + text);
         var text = document.getElementById("myBox");
         text.select();
         navigator.clipboard.writeText(text.value);
+        props.showAlert("Copied to Clipboard!", "success");
     }
 
     const handleClearText = () => {
-        // console.log("ClearText was clicked :- " + text);
         let newText = '';
-        setText(newText)
+        setText(newText);
+        props.showAlert("Text cleared!", "success");
     }
 
     const handleExtraSpaces = () => {
-        // console.log("RemoveExtraSpaces was clicked :- " + text);
         let newText = text.split(/[ ]+/);
         setText(newText.join(" "))
+        props.showAlert("Extra spaces removed!", "success")
     }
 
     const handleSpeakText = () => {
-        // console.log("SpeakText was clicked :- " + text);
         let msg = new SpeechSynthesisUtterance();
         msg.text = text;
         window.speechSynthesis.speak(msg);
+        props.showAlert("Speaking...", "success")
     }
 
     const handleDownloadText = () => {
-        // console.log("DownloadText was clicked :- " + text);
         const element = document.createElement("a");
         const file = new Blob([text], {
             type: "text/plain"
@@ -49,24 +48,21 @@ export default function TextForm(props) {
         element.href = URL.createObjectURL(file);
         element.download = "myFile.txt";
         element.click();
+        props.showAlert("Downloading...", "success")
     }
 
     const handleOnChange = (event) => {
-        // console.log("On Change");
         setText(event.target.value);
     }
 
     const [text, setText] = useState('');
 
-    // text = "New Text" // Wrong way to change the state
-    // setText("New Text") // Right way to change the state
-
     return (
         <>
-            <div className="container">
+            <div className="container" style={{ color: props.mode === `dark` ? `white` : `black` }}>
                 <h1>{props.heading}</h1>
                 <div className="mb-3">
-                    <textarea className="form-control" value={text} onChange={handleOnChange} id="myBox" rows="8"></textarea>
+                    <textarea className="form-control" value={text} onChange={handleOnChange} style={{ backgroundColor: props.mode === `dark` ? `#212635` : `white`, color: props.mode === `dark` ? `white` : `black` }} id="myBox" rows="8"></textarea>
                 </div>
                 <button className="btn btn-primary mx-1" onClick={handleUpClick}>Convert to UpperCase</button>
                 <button className="btn btn-primary mx-1" onClick={handleLowClick}>Convert to LowerCase</button>
@@ -76,12 +72,13 @@ export default function TextForm(props) {
                 <button className="btn btn-primary mx-1" onClick={handleSpeakText}>Speak Text</button>
                 <button className="btn btn-primary mx-1" onClick={handleDownloadText}>Download Text</button>
             </div>
-            <div className="container my-3"></div>
-            <h2>Your text summary</h2>
-            <p>{text.split(" ").length} words and {text.length} characters</p>
-            <p>{0.008 * text.split(" ").length} Minutes read</p>
-            <h2>Preview</h2>
-            <p>{text}</p>
+            <div className="container my-3" style={{ color: props.mode === `dark` ? `white` : `black` }}>
+                <h2>Your text summary</h2>
+                <p>{text.split(" ").length} words and {text.length} characters</p>
+                <p>{0.008 * text.split(" ").length} Minutes read</p>
+                <h2>Preview</h2>
+                <p>{text}</p>
+            </div>
         </>
     )
 }
